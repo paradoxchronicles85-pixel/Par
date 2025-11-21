@@ -1,0 +1,712 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paradox - Where Prosperity Meets Divinity</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index-styles.css">
+</head>
+<body>
+    <!-- Cursor Follow Effect -->
+    <div class="cursor-glow"></div>
+    <div class="cursor-dot"></div>
+
+    <!-- Morphing Background -->
+    <div class="morph-bg">
+        <svg class="morph-svg" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="morphGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#667eea;stop-opacity:0.4" />
+                    <stop offset="100%" style="stop-color:#764ba2;stop-opacity:0.6" />
+                </linearGradient>
+                <linearGradient id="morphGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#f093fb;stop-opacity:0.5" />
+                    <stop offset="100%" style="stop-color:#FFD700;stop-opacity:0.3" />
+                </linearGradient>
+                <filter id="goo">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
+                </filter>
+            </defs>
+            <g filter="url(#goo)">
+                <circle class="morph-blob morph-blob-1" cx="200" cy="200" r="150" fill="url(#morphGrad1)" />
+                <circle class="morph-blob morph-blob-2" cx="1000" cy="600" r="200" fill="url(#morphGrad2)" />
+                <circle class="morph-blob morph-blob-3" cx="600" cy="400" r="180" fill="url(#morphGrad1)" />
+            </g>
+        </svg>
+    </div>
+
+    <!-- Constellation Canvas -->
+    <canvas id="constellationCanvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="nav" data-scroll-lock>
+        <div class="nav-container">
+            <div class="logo-group">
+                <svg class="logo-custom" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#FFD700" />
+                            <stop offset="50%" style="stop-color:#FFA500" />
+                            <stop offset="100%" style="stop-color:#FFD700" />
+                        </linearGradient>
+                        <filter id="logoGlow">
+                            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    
+                    <!-- Outer rotating ring -->
+                    <circle cx="60" cy="60" r="50" fill="none" stroke="url(#logoGradient)" stroke-width="2" opacity="0.3" class="logo-ring-outer"/>
+                    
+                    <!-- Middle rotating ring -->
+                    <circle cx="60" cy="60" r="40" fill="none" stroke="url(#logoGradient)" stroke-width="1.5" opacity="0.5" class="logo-ring-middle"/>
+                    
+                    <!-- Sacred geometry hexagon -->
+                    <path d="M 60 20 L 85 35 L 85 65 L 60 80 L 35 65 L 35 35 Z" 
+                          fill="none" stroke="url(#logoGradient)" stroke-width="2.5" filter="url(#logoGlow)" class="logo-hex"/>
+                    
+                    <!-- Inner sacred triangles -->
+                    <path d="M 60 30 L 75 60 L 60 60 Z" fill="url(#logoGradient)" opacity="0.6" class="logo-tri-1"/>
+                    <path d="M 60 30 L 45 60 L 60 60 Z" fill="url(#logoGradient)" opacity="0.4" class="logo-tri-2"/>
+                    
+                    <!-- Center divine light -->
+                    <circle cx="60" cy="60" r="8" fill="url(#logoGradient)" filter="url(#logoGlow)" class="logo-center"/>
+                    <circle cx="60" cy="60" r="4" fill="#fff" opacity="0.9"/>
+                    
+                    <!-- Orbiting particles -->
+                    <circle class="logo-particle logo-p1" cx="60" cy="20" r="3" fill="#FFD700" opacity="0.8"/>
+                    <circle class="logo-particle logo-p2" cx="85" cy="50" r="2.5" fill="#FFA500" opacity="0.7"/>
+                    <circle class="logo-particle logo-p3" cx="35" cy="70" r="2" fill="#FFD700" opacity="0.6"/>
+                </svg>
+                <div class="logo-text-wrap">
+                    <span class="logo-title">PARADOX</span>
+                    <span class="logo-subtitle">Divine Prosperity</span>
+                </div>
+            </div>
+            
+            <div class="nav-links">
+                <a href="#features" class="nav-link magnetic-link">
+                    <span class="link-text">Features</span>
+                    <span class="link-hover-bg"></span>
+                </a>
+                <a href="#success" class="nav-link magnetic-link">
+                    <span class="link-text">Success</span>
+                    <span class="link-hover-bg"></span>
+                </a>
+                <a href="#pricing" class="nav-link magnetic-link">
+                    <span class="link-text">Pricing</span>
+                    <span class="link-hover-bg"></span>
+                </a>
+            </div>
+            
+            <div class="nav-cta">
+                <button class="btn-nav-login magnetic-btn" id="navLogin">
+                    <span>Login</span>
+                </button>
+                <button class="btn-nav-start magnetic-btn" id="navStart">
+                    <span>Start Earning</span>
+                    <div class="btn-particles"></div>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge magnetic-element">
+                    <div class="badge-pulse-ring"></div>
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                        <circle cx="8" cy="8" r="8" fill="#10b981"/>
+                    </svg>
+                    <span>50,000+ Active Members</span>
+                </div>
+
+                <h1 class="hero-title">
+                    <span class="title-line" data-aos="reveal">Earn Money</span>
+                    <span class="title-line title-gradient" data-aos="reveal" data-delay="200">
+                        Completing Tasks
+                    </span>
+                    <span class="title-line" data-aos="reveal" data-delay="400">Online</span>
+                </h1>
+
+                <p class="hero-description" data-aos="fade-up" data-delay="600">
+                    Join thousands earning real income through verified tasks. 
+                    Complete simple assignments, get paid instantly, build your income stream.
+                </p>
+
+                <div class="hero-cta-group" data-aos="fade-up" data-delay="800">
+                    <button class="btn-hero-primary magnetic-btn" id="heroStart">
+                        <span class="btn-text">Begin Your Journey</span>
+                        <svg class="btn-arrow" width="20" height="20" viewBox="0 0 20 20">
+                            <path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                        <div class="btn-shine"></div>
+                    </button>
+                    <button class="btn-hero-secondary magnetic-btn">
+                        <div class="play-icon">
+                            <svg width="12" height="14" viewBox="0 0 12 14">
+                                <path d="M0 0L12 7L0 14V0Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <span>Watch The Revelation</span>
+                    </button>
+                </div>
+
+                <div class="hero-stats" data-aos="fade-up" data-delay="1000">
+                    <div class="stat-item tilt-card">
+                        <div class="stat-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                            </svg>
+                        </div>
+                        <div class="stat-value counter" data-target="12500000">0</div>
+                        <div class="stat-label">Monthly Payouts</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item tilt-card">
+                        <div class="stat-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                            </svg>
+                        </div>
+                        <div class="stat-value counter" data-target="98">0</div>
+                        <div class="stat-label">Success Rate</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item tilt-card">
+                        <div class="stat-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </div>
+                        <div class="stat-value"><span class="counter" data-target="2">0</span>-5min</div>
+                        <div class="stat-label">Per Task</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="visual-scene">
+                    <!-- 3D Floating Cards -->
+                    <div class="float-card card-earnings tilt-card magnetic-element">
+                        <div class="card-glow"></div>
+                        <div class="card-header">
+                            <div class="card-icon-wrap">
+                                <svg class="card-icon" width="32" height="32" viewBox="0 0 32 32">
+                                    <circle cx="16" cy="16" r="14" fill="#10b981" opacity="0.2"/>
+                                    <path d="M16 8v16M8 16h16" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <span class="card-badge">Today</span>
+                        </div>
+                        <div class="card-amount">
+                            <span class="currency">₦</span>
+                            <span class="amount counter" data-target="24750">0</span>
+                        </div>
+                        <div class="card-label">Total Earned</div>
+                        <div class="card-chart">
+                            <svg width="100%" height="40" viewBox="0 0 120 40">
+                                <path class="chart-line" d="M 0 30 Q 20 25, 40 20 T 80 10 T 120 5" 
+                                      fill="none" stroke="url(#chartGrad)" stroke-width="2"/>
+                                <defs>
+                                    <linearGradient id="chartGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.3"/>
+                                        <stop offset="100%" style="stop-color:#10b981;stop-opacity:1"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="float-card card-tasks tilt-card magnetic-element">
+                        <div class="card-glow"></div>
+                        <div class="tasks-header">
+                            <span class="tasks-title">Active Quests</span>
+                            <div class="tasks-count">
+                                <span class="count-num">18</span>
+                                <svg width="16" height="16" viewBox="0 0 16 16">
+                                    <path d="M8 2v12M4 6l4-4 4 4" stroke="#FFD700" stroke-width="2" fill="none"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="task-item">
+                            <div class="task-check">✓</div>
+                            <span>Social Engagement</span>
+                            <span class="task-reward">₦2,500</span>
+                        </div>
+                        <div class="task-item">
+                            <div class="task-check">✓</div>
+                            <span>Content Creation</span>
+                            <span class="task-reward">₦3,200</span>
+                        </div>
+                        <div class="task-item active">
+                            <div class="task-spinner"></div>
+                            <span>Divine Survey</span>
+                            <span class="task-reward">₦1,800</span>
+                        </div>
+                    </div>
+
+                    <div class="float-card card-referrals tilt-card magnetic-element">
+                        <div class="card-glow"></div>
+                        <div class="referral-header">
+                            <svg width="40" height="40" viewBox="0 0 40 40">
+                                <circle cx="20" cy="15" r="6" fill="#667eea"/>
+                                <path d="M12 28c0-4.4 3.6-8 8-8s8 3.6 8 8" fill="#667eea" opacity="0.6"/>
+                                <circle cx="30" cy="12" r="4" fill="#f093fb"/>
+                                <circle cx="10" cy="12" r="4" fill="#f093fb"/>
+                            </svg>
+                        </div>
+                        <div class="referral-count counter" data-target="47">0</div>
+                        <div class="referral-label">Prosperity Partners</div>
+                        <div class="referral-earnings">+₦<span class="counter" data-target="18500">0</span>/month</div>
+                    </div>
+
+                    <!-- Geometric Shapes -->
+                    <div class="geo-shape shape-1">
+                        <svg viewBox="0 0 100 100">
+                            <polygon points="50,10 90,35 75,75 25,75 10,35" 
+                                     fill="none" stroke="url(#logoGradient)" stroke-width="1.5" opacity="0.3"/>
+                        </svg>
+                    </div>
+                    <div class="geo-shape shape-2">
+                        <svg viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" 
+                                    fill="none" stroke="#667eea" stroke-width="1" opacity="0.2"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-header">
+            <span class="section-badge" data-aos="fade-up">Platform Features</span>
+            <h2 class="section-title" data-aos="fade-up" data-delay="100">
+                Professional Tools for<br/>
+                <span class="gradient-text">Real Results</span>
+            </h2>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card-advanced tilt-card magnetic-element" data-aos="zoom-in" data-delay="0">
+                <div class="feature-bg-pattern"></div>
+                <div class="feature-icon-advanced">
+                    <svg width="48" height="48" viewBox="0 0 48 48">
+                        <circle cx="24" cy="24" r="20" fill="url(#feat1Grad)" opacity="0.2"/>
+                        <path d="M24 8v32M8 24h32" stroke="url(#feat1Grad)" stroke-width="3" stroke-linecap="round"/>
+                        <circle cx="24" cy="24" r="6" fill="url(#feat1Grad)"/>
+                        <defs>
+                            <linearGradient id="feat1Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#10b981"/>
+                                <stop offset="100%" style="stop-color:#059669"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h3>Instant Payments</h3>
+                <p>Earnings deposited in your account within 2-5 minutes. No waiting, no delays—immediate access to your money.</p>
+                <div class="feature-accent"></div>
+            </div>
+
+            <div class="feature-card-advanced tilt-card magnetic-element" data-aos="zoom-in" data-delay="100">
+                <div class="feature-bg-pattern"></div>
+                <div class="feature-icon-advanced">
+                    <svg width="48" height="48" viewBox="0 0 48 48">
+                        <rect x="8" y="12" width="12" height="28" rx="2" fill="url(#feat2Grad)" opacity="0.3"/>
+                        <rect x="24" y="8" width="12" height="32" rx="2" fill="url(#feat2Grad)"/>
+                        <defs>
+                            <linearGradient id="feat2Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#667eea"/>
+                                <stop offset="100%" style="stop-color:#764ba2"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h3>Verified Task Library</h3>
+                <p>Curated assignments from verified vendors. Every task checked for legitimacy and fair compensation.</p>
+                <div class="feature-accent"></div>
+            </div>
+
+            <div class="feature-card-advanced tilt-card magnetic-element" data-aos="zoom-in" data-delay="200">
+                <div class="feature-bg-pattern"></div>
+                <div class="feature-icon-advanced">
+                    <svg width="48" height="48" viewBox="0 0 48 48">
+                        <path d="M24 8l4 12h12l-10 8 4 12-10-8-10 8 4-12-10-8h12z" fill="url(#feat3Grad)"/>
+                        <defs>
+                            <linearGradient id="feat3Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#FFD700"/>
+                                <stop offset="100%" style="stop-color:#FFA500"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h3>Bank-Level Security</h3>
+                <p>Military-grade encryption protecting all transactions. Your earnings are completely secured.</p>
+                <div class="feature-accent"></div>
+            </div>
+
+            <div class="feature-card-advanced tilt-card magnetic-element" data-aos="zoom-in" data-delay="300">
+                <div class="feature-bg-pattern"></div>
+                <div class="feature-icon-advanced">
+                    <svg width="48" height="48" viewBox="0 0 48 48">
+                        <circle cx="20" cy="20" r="8" fill="url(#feat4Grad)"/>
+                        <circle cx="32" cy="16" r="5" fill="url(#feat4Grad)" opacity="0.7"/>
+                        <circle cx="28" cy="32" r="6" fill="url(#feat4Grad)" opacity="0.5"/>
+                        <path d="M20 20L32 16M20 20L28 32M32 16L28 32" stroke="url(#feat4Grad)" stroke-width="1.5"/>
+                        <defs>
+                            <linearGradient id="feat4Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#f093fb"/>
+                                <stop offset="100%" style="stop-color:#764ba2"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h3>Referral Network</h3>
+                <p>Build your income network. Earn passive income as your referrals complete tasks and grow.</p>
+                <div class="feature-accent"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Stories -->
+    <section class="success-stories" id="success">
+        <div class="section-header">
+            <span class="section-badge" data-aos="fade-up">Testimonials</span>
+            <h2 class="section-title" data-aos="fade-up" data-delay="100">
+                Witness The <span class="gradient-text">Transformation</span>
+            </h2>
+        </div>
+
+        <div class="testimonials-carousel">
+            <div class="testimonial-card-premium tilt-card magnetic-element" data-aos="fade-left">
+                <div class="testimonial-quote">"</div>
+                <div class="testimonial-stars">
+                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                </div>
+                <p class="testimonial-text">
+                    "From ₦0 to ₦145,000 in 60 days. This isn't just a platform—it's divine intervention. 
+                    The tasks are effortless, the payments instant, and the support team feels like guardian angels."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar-premium">
+                        <span>A</span>
+                        <div class="avatar-glow"></div>
+                    </div>
+                    <div class="author-info">
+                        <div class="author-name">Ada Nwosu</div>
+                        <div class="author-location">Lagos, Nigeria</div>
+                        <div class="author-earning">₦145,000 manifested</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card-premium tilt-card magnetic-element" data-aos="fade-up">
+                <div class="testimonial-quote">"</div>
+                <div class="testimonial-stars">
+                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                </div>
+                <p class="testimonial-text">
+                    "The referral system changed everything. I built a network of 200+ people and now earn ₦80k monthly 
+                    without lifting a finger. This is the future of prosperity."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar-premium">
+                        <span>C</span>
+                        <div class="avatar-glow"></div>
+                    </div>
+                    <div class="author-info">
+                        <div class="author-name">Chidi Okafor</div>
+                        <div class="author-location">Abuja, Nigeria</div>
+                        <div class="author-earning">₦420,000 total wealth</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card-premium tilt-card magnetic-element" data-aos="fade-right">
+                <div class="testimonial-quote">"</div>
+                <div class="testimonial-stars">
+                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                </div>
+                <p class="testimonial-text">
+                    "I was skeptical until I withdrew ₦50k in my first week. The platform is beautifully designed, 
+                    tasks are verified, and support responds in minutes. Pure excellence."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar-premium">
+                        <span>B</span>
+                        <div class="avatar-glow"></div>
+                    </div>
+                    <div class="author-info">
+                        <div class="author-name">Blessing Eze</div>
+                        <div class="author-location">Port Harcourt, Nigeria</div>
+                        <div class="author-earning">₦127,000 earned</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="section-header">
+            <span class="section-badge" data-aos="fade-up">Membership Plans</span>
+            <h2 class="section-title" data-aos="fade-up" data-delay="100">
+                Choose Your <span class="gradient-text">Income Plan</span>
+            </h2>
+            <p class="section-subtitle" data-aos="fade-up" data-delay="200">
+                One-time activation. Unlimited earning potential.
+            </p>
+        </div>
+
+        <div class="pricing-grid-premium">
+            <div class="price-card-premium tilt-card magnetic-element" data-aos="zoom-in" data-delay="0">
+                <div class="price-glow"></div>
+                <div class="price-header">
+                    <h3>Lite Plug</h3>
+                    <p class="price-desc">Begin Your Journey</p>
+                </div>
+                <div class="price-amount-wrap">
+                    <span class="price-currency">₦</span>
+                    <span class="price-amount">7,000</span>
+                </div>
+                <div class="price-period">One-time activation fee</div>
+                <ul class="price-features-premium">
+                    <li><svg width="20" height="20" viewBox="0 0 20 20"><path d="M7 10l2 2 4-4" stroke="#10b981" stroke-width="2" fill="none"/></svg>50+ monthly tasks</li>
+                    <li><svg width="20" height="20" viewBox="0 0 20 20"><path d="M7 10l2 2 4-4" stroke="#10b981" stroke-width="2" fill="none"/></svg>₦500-₦1,000 per task</li>
+                    <li><svg width="20" height="20" viewBox="0 0 20 20"><path d="M7 10l2 2 4-4" stroke="#10b981" stroke-width="2" fill="none"/></svg>Instant payments</li>
+                    <li><svg width="20" height="20" viewBox="0 0 20 20"><path d="M7 10l2 2 4-4" stroke="#10b981" stroke-width="2" fill="none"/></svg>Email support</li>
+                </ul>
+                <button class="btn-price-premium magnetic-btn">
+                    <span>Claim Portal</span>
+                </button>
+            </div>
+
+            <div class="price-card-premium featured tilt-card magnetic-element" data-aos="zoom-in" data-delay="100">
+                <div class="featured-badge-premium">Most Powerful</div>
+                <div class="price-glow"></div>
+                <div class="price-header">
+                    <h3>Standard Plug</h3>
+                    <p class="price-desc">Accelerated Abundance</p>
+                </div>
+                <div class="price-amount-wrap">
+                    <span class="price-currency">₦</span>
+                    <span class="price-amount">12,000</span>
+                </div>
+                <div class="price-period">One-time divine investment</div>
+                <ul class="price-features-premium">
+                    <li><svg width="20" height="20" viewBox="0 0 20 20"><path d="M7 10l2 2 4-4" stroke="#10b981" stroke-width="2" fill="none"/></svg>200+ premium tasks</li>
+                    <li><svg width="20" height="20" viewBox="0 0 20 20"><path d="M7 10l2 2 4-4" stroke="#10b981" stroke-width="2" fill="none"/></svg>₦1,000-₦2,000 per quest</li>
+                    <li><svg width="20" height="20" viewBox="0 0 20 20"><path d="M7 10l2 2 4-4" stroke="#10b981" stroke-width="2" fill="none"/></svg>Priority divine support</li>
+                    <li><svg width="20" height="20" viewBox="0 0 20 20"><path d="M7 10l2 2 4-4" stroke="#10b981" stroke-width="2" fill="none"/></svg>10% network rewards</li>
+                    <li><svg width="20" height="20" viewBox="0 0 20 20"><path d="M7 10l2 2 4-4" stroke="#10b981" stroke-width="2" fill="none"/></svg>Advanced training</li>
+                </ul>
+                <button class="btn-price-premium primary magnetic-btn">
+                    <span>Unlock Power</span>
+                    <div class="btn-particles"></div>
+                </button>
+            </div>
+
+            <div class="price-card-premium tilt-card magnetic-element" data-aos="zoom-in" data-delay="200">
+                <div class="price-glow"></div>
+                <div class="price-header">
+                    <h3>Premium Plug</h3>
+                    <p class="price-desc">Ultimate Mastery</p>
+                </div>
+                <div class="price-amount-wrap">
+                    <span class="price-currency">₦</span>
+                    <span class="price-amount">17,500</span>
+                </div>
+                <div class="price-period">One-time divine investment</div>
+                <ul class="price-features-premium">
+                    <li><svg width="20" height="20" viewBox="0 0 20 20"><path d="M7 10l2 2 4-4" stroke="#10b981" stroke-width="2" fill="none"/></svg>Unlimited elite quests</li>
+                    <li><svg width="20" height="20" viewBox="0 0 20 20"><path d="M7 10l2 2 4-4" stroke="#10b981" stroke-width="2" fill="none"/></svg>₦2,000-₦5,000 rewards</li>
+                    <li><svg width="20" height="20" viewBox="0 0 20 20"><path d="M7 10l2 2 4-4" stroke="#10b981" stroke-width="2" fill="none"/></svg>24/7 VIP guardians</li>
+                    <li><svg width="20" height="20" viewBox="0 0 20 20"><path d="M7 10l2 2 4-4" stroke="#10b981" stroke-width="2" fill="none"/></svg>20% prosperity bonuses</li>
+                    <li><svg width="20" height="20" viewBox="0 0 20 20"><path d="M7 10l2 2 4-4" stroke="#10b981" stroke-width="2" fill="none"/></svg>Expert mentorship</li>
+                    <li><svg width="20" height="20" viewBox="0 0 20 20"><path d="M7 10l2 2 4-4" stroke="#10b981" stroke-width="2" fill="none"/></svg>Exclusive celestial perks</li>
+                </ul>
+                <button class="btn-price-premium magnetic-btn">
+                    <span>Ascend Now</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <div class="cta-content-wrap">
+            <div class="cta-visual">
+                <div class="cta-circle-1"></div>
+                <div class="cta-circle-2"></div>
+                <div class="cta-rays"></div>
+            </div>
+            <h2 class="cta-title" data-aos="zoom-in">
+                Your Income Stream<br/>
+                <span class="gradient-text">Starts Today</span>
+            </h2>
+            <p class="cta-subtitle" data-aos="fade-up" data-delay="200">
+                Join 50,000+ members earning verified income daily
+            </p>
+            <button class="btn-final-cta magnetic-btn" id="finalCTA" data-aos="zoom-in" data-delay="400">
+                <span class="btn-text">Start Earning Now</span>
+                <div class="btn-glow-ring"></div>
+                <div class="btn-particles"></div>
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo-group">
+                    <svg class="logo-custom" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 30 10 L 45 20 L 50 35 L 45 50 L 30 60 L 15 50 L 10 35 L 15 20 Z" 
+                              fill="none" stroke="url(#logoGradient)" stroke-width="2"/>
+                        <circle cx="30" cy="30" r="8" fill="url(#logoGradient)"/>
+                    </svg>
+                    <span class="logo-title">PARADOX</span>
+                </div>
+                <p class="footer-desc">
+                    Professional task platform connecting members with verified opportunities. 
+                    Instant payments, real income, proven results.
+                </p>
+            </div>
+            <div class="footer-links-group">
+                <div class="footer-col">
+                    <h4>Platform</h4>
+                    <a href="#features">Features</a>
+                    <a href="#success">Success Stories</a>
+                    <a href="#pricing">Pricing</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="#">Help Center</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Terms</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Paradox. All rights reserved. Divinely secured and verified.</p>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content-premium">
+            <button class="modal-close" id="closeModal">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M6 6l12 12M6 18L18 6" stroke="currentColor" stroke-width="2"/>
+                </svg>
+            </button>
+
+            <div id="signupForm" class="auth-form-premium">
+                <div class="form-header">
+                    <svg class="form-icon" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="30" cy="30" r="28" fill="url(#logoGradient)" opacity="0.2"/>
+                        <path d="M 30 10 L 45 20 L 50 35 L 45 50 L 30 60 L 15 50 L 10 35 L 15 20 Z" 
+                              fill="none" stroke="url(#logoGradient)" stroke-width="2"/>
+                        <circle cx="30" cy="30" r="8" fill="url(#logoGradient)"/>
+                    </svg>
+                    <h2>Begin Your Journey</h2>
+                    <p>Enter the realm of divine prosperity</p>
+                </div>
+                <form id="signupFormElement">
+                    <div class="form-group-premium">
+                        <input type="text" name="fullname" required placeholder=" ">
+                        <label>Full Name</label>
+                        <div class="input-line"></div>
+                    </div>
+                    <div class="form-group-premium">
+                        <input type="email" name="email" required placeholder=" ">
+                        <label>Email Address</label>
+                        <div class="input-line"></div>
+                    </div>
+                    <div class="form-group-premium">
+                        <input type="tel" name="phone" required placeholder=" " pattern="^\+?[0-9]{10,15}$">
+                        <label>Phone Number</label>
+                        <div class="input-line"></div>
+                    </div>
+                    <div class="form-group-premium">
+                        <input type="password" name="password" required placeholder=" " minlength="8">
+                        <label>Password</label>
+                        <div class="input-line"></div>
+                    </div>
+                    <div class="form-group-premium">
+                        <select name="plan" required>
+                            <option value="">Select Your Portal</option>
+                            <option value="lite">Lite Plug - ₦7,000</option>
+                            <option value="standard">Standard Plug - ₦12,000</option>
+                            <option value="premium">Premium Plug - ₦17,500</option>
+                        </select>
+                        <div class="input-line"></div>
+                    </div>
+                    <div class="form-group-premium">
+                        <input type="text" name="coupon" placeholder=" ">
+                        <label>Coupon Code (Required for paid plans)</label>
+                        <div class="input-line"></div>
+                    </div>
+                    <button type="submit" class="btn-submit-premium magnetic-btn">
+                        <span>Activate Portal</span>
+                        <div class="btn-shine"></div>
+                    </button>
+                </form>
+                <div class="form-switch">
+                    Already awakened? <span id="showLogin">Sign In</span>
+                </div>
+            </div>
+
+            <div id="loginForm" class="auth-form-premium" style="display: none;">
+                <div class="form-header">
+                    <svg class="form-icon" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="30" cy="30" r="28" fill="url(#logoGradient)" opacity="0.2"/>
+                        <path d="M 30 10 L 45 20 L 50 35 L 45 50 L 30 60 L 15 50 L 10 35 L 15 20 Z" 
+                              fill="none" stroke="url(#logoGradient)" stroke-width="2"/>
+                        <circle cx="30" cy="30" r="8" fill="url(#logoGradient)"/>
+                    </svg>
+                    <h2>Welcome Back</h2>
+                    <p>Continue your prosperity journey</p>
+                </div>
+                <form id="loginFormElement">
+                    <div class="form-group-premium">
+                        <input type="tel" name="phone" required placeholder=" ">
+                        <label>Phone Number</label>
+                        <div class="input-line"></div>
+                    </div>
+                    <div class="form-group-premium">
+                        <input type="password" name="password" required placeholder=" ">
+                        <label>Password</label>
+                        <div class="input-line"></div>
+                    </div>
+                    <button type="submit" class="btn-submit-premium magnetic-btn">
+                        <span>Enter Portal</span>
+                        <div class="btn-shine"></div>
+                    </button>
+                </form>
+                <div class="form-switch">
+                    New to paradise? <span id="showSignup">Create Account</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app-auth.js"></script>
+    <script src="app-connect.js"></script>
+    <script src="home-animations.js"></script>
+</body>
+</html>
