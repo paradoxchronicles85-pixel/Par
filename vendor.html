@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Vendor Portal - Paradox</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        body { margin: 0; padding: 0; }
+        .vendor-container { min-height: 100vh; padding: 2rem; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); }
+        @media (max-width: 768px) { .vendor-container { padding: 1rem; } }
+        .vendor-header { background: rgba(255, 255, 255, 0.05); padding: 2rem; border-radius: 20px; margin-bottom: 2rem; backdrop-filter: blur(10px); }
+        .vendor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+        .vendor-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 2rem; }
+        @media (max-width: 768px) { .vendor-card { padding: 1rem; } }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; color: rgba(255, 255, 255, 0.8); margin-bottom: 0.5rem; font-weight: 600; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px; color: white; font-size: 1rem; }
+        .form-group textarea { min-height: 100px; resize: vertical; }
+        .btn-create-task { width: 100%; padding: 15px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
+        .btn-create-task:hover { transform: scale(1.02); }
+        .task-manager { background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 2rem; }
+        @media (max-width: 768px) { .task-manager { padding: 1rem; } }
+        .task-item-admin { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 1.5rem; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 1rem; }
+        @media (min-width: 768px) { .task-item-admin { flex-direction: row; justify-content: space-between; align-items: center; } }
+        .task-info-admin h4 { color: white; margin-bottom: 0.5rem; }
+        .task-info-admin p { color: rgba(255, 255, 255, 0.6); margin-bottom: 0.5rem; font-size: 0.9rem; }
+        .task-status { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.875rem; font-weight: 600; }
+        .status-active { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .status-inactive { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .btn-toggle { padding: 8px 20px; background: rgba(59, 130, 246, 0.2); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; cursor: pointer; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <svg class="logo-icon" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <defs>
+                        <linearGradient id="main-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#667eea"/><stop offset="50%" style="stop-color:#764ba2"/><stop offset="100%" style="stop-color:#f093fb"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="20" cy="20" r="18" fill="url(#main-gradient)" opacity="0.2"/><path d="M20 4 L28 10 L32 20 L28 30 L20 36 L12 30 L8 20 L12 10 Z" fill="url(#main-gradient)"/><circle cx="20" cy="20" r="4" fill="white" opacity="0.9"/>
+                </svg>
+                <span class="logo-text">PARADOX</span>
+            </div>
+            <div class="user-info">
+                <span id="vendorName" style="color: white; margin-right: 1rem;">Loading...</span>
+                <button class="btn-logout" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="vendor-container">
+        <div class="vendor-header">
+            <h1 style="color: white; margin-bottom: 0.5rem;">⚡ Vendor Control Panel</h1>
+            <p style="color: rgba(255, 255, 255, 0.7);">Create tasks, manage engagement, and grow the Paradox community</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalGenerated">0</div>
+                    <div class="stat-label">Total Codes Generated</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalUsed">0</div>
+                    <div class="stat-label">Codes Used</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="activeCode">0</div>
+                    <div class="stat-label">Active Codes</div>
+                </div>
+            </div>
+
+            <div class="generate-section">
+                <h2 style="margin-bottom: 1rem;">Generate New Coupon Code</h2>
+                <div class="form-group">
+                    <label>Select Plan for Coupon</label>
+                    <select id="couponPlanSelect" style="width: 100%; padding: 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; font-size: 1rem; margin-bottom: 1rem;">
+                        <option value="lite">Lite Plug - ₦7,000</option>
+                        <option value="standard">Standard Plug - ₦12,000</option>
+                        <option value="premium">Premium Plug - ₦17,500</option>
+                        <option value="bg">BG Plug - ₦22,000</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Discount Percentage: <span id="discountValue">10</span>%</label>
+                    <input type="range" class="discount-slider" id="discountSlider" min="5" max="50" value="10" step="5">
+                </div>
+                <button class="btn-cta" id="generateBtn" style="width: 100%;">
+                    <span>Generate Code</span>
+                    <svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 2L12.245 7.51L18 8.26L14 12.14L15.09 18L10 15.27L4.91 18L6 12.14L2 8.26L7.755 7.51L10 2Z" fill="currentColor"/>
+                    </svg>
+                </button>
+                <div id="generatedCode" style="display: none;">
+                    <div class="coupon-code-display" id="codeDisplay"></div>
+                    <button class="btn-cta" id="copyBtn" style="width: 100%; margin-top: 1rem; background: #10b981;">
+                        <span>Copy to Clipboard</span>
+                        <svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 3H15V15H7V3Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <path d="M5 5H3V17H13V15" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                    </button>
+                    <button class="btn-cta" id="whatsappBtn" style="width: 100%; margin-top: 0.5rem; background: #25D366;">
+                        <span>Share via WhatsApp</span>
+                        <svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 2C5.6 2 2 5.6 2 10C2 11.4 2.4 12.7 3 13.9L2 18L6.2 17C7.4 17.6 8.7 18 10 18C14.4 18 18 14.4 18 10C18 5.6 14.4 2 10 2ZM14 13.5C13.8 14.1 12.9 14.6 12.3 14.7C11.9 14.8 11.4 14.8 10.5 14.5C10 14.3 9.3 14.1 8.5 13.6C6.3 12.5 4.9 10.3 4.8 10.1C4.7 10 4 9 4 8C4 7 4.5 6.5 4.7 6.3C4.9 6.1 5.1 6 5.3 6H5.8C6 6 6.2 6 6.4 6.5C6.6 7 7.1 8 7.1 8.1C7.2 8.2 7.2 8.3 7.1 8.4C7.1 8.5 6.9 8.7 6.6 9C6.5 9.1 6.4 9.2 6.5 9.4C6.6 9.6 7.1 10.4 7.8 11C8.7 11.8 9.4 12.1 9.6 12.2C9.8 12.3 9.9 12.3 10 12.1C10.1 12 10.6 11.4 10.7 11.2C10.8 11 11 11 11.2 11.1L13 12C13.2 12.1 13.4 12.2 13.5 12.3C13.6 12.5 13.6 13 14 13.5Z" fill="currentColor"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="coupons-list">
+                <h2 style="margin-bottom: 1.5rem;">Recent Coupon Codes</h2>
+                <div id="couponsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const vendorId = 'vendor1'; // In production, this would be from login
+        let currentCode = '';
+        let currentDiscount = 10;
+
+        // User type detection - 10 verified vendors
+        let ADMIN_PHONES = ['+13124202900'];
+        let VENDOR_PHONES = [
+            '+2347084174994', '+2347040759259', '+2348143662936',
+            '+2347044035084', '+2347089902875', '+2347048787493',
+            '+2349163483144', '+2349046428186', '+2347071401650'
+        ];
+
+        // Update discount value display
+        document.getElementById('discountSlider').addEventListener('input', (e) => {
+            currentDiscount = e.target.value;
+            document.getElementById('discountValue').textContent = currentDiscount;
+        });
+
+        // Generate coupon code
+        document.getElementById('generateBtn').addEventListener('click', async () => {
+            const selectedPlan = document.getElementById('couponPlanSelect').value;
+            try {
+                const response = await fetch('/api/vendor/generate-coupon', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ vendorId, discount: parseInt(currentDiscount), plan: selectedPlan })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    currentCode = result.coupon.code;
+                    document.getElementById('codeDisplay').textContent = currentCode;
+                    document.getElementById('generatedCode').style.display = 'block';
+                    loadStats();
+                    showNotification(`Coupon for ${selectedPlan.toUpperCase()} plan generated! 🎉`, 'success');
+                }
+            } catch (error) {
+                showNotification('Error generating coupon', 'error');
+            }
+        });
+
+        // Copy to clipboard
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            navigator.clipboard.writeText(currentCode);
+            showNotification('Code copied to clipboard! 📋', 'success');
+        });
+
+        // Share via WhatsApp
+        document.getElementById('whatsappBtn').addEventListener('click', () => {
+            const selectedPlan = document.getElementById('couponPlanSelect').value;
+            const planNames = { lite: 'Lite Plug', standard: 'Standard Plug', premium: 'Premium Plug', bg: 'BG Plug' };
+            const message = `🎉 Exclusive Paradox Discount Code!\n\n✨ Code: ${currentCode}\n💎 Valid for: ${planNames[selectedPlan]}\n🎁 Discount: ${currentDiscount}% OFF\n\n🚀 Transform your financial future with Paradox!\nJoin today: ${window.location.origin}\n\n⚠️ This code can only be used once!`;
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        });
+
+        // Load vendor stats
+        async function loadStats() {
+            try {
+                const response = await fetch(`/api/vendor/stats?vendorId=${vendorId}`);
+                const data = await response.json();
+
+                document.getElementById('totalGenerated').textContent = data.stats.totalGenerated;
+                document.getElementById('totalUsed').textContent = data.stats.totalUsed;
+                document.getElementById('activeCode').textContent = data.stats.activeCode;
+
+                // Display recent coupons
+                const couponsList = document.getElementById('couponsList');
+                couponsList.innerHTML = data.recentCoupons.map(coupon => `
+                    <div class="coupon-item ${coupon.used ? 'used' : ''}">
+                        <div>
+                            <strong>${coupon.code}</strong>
+                            <div style="font-size: 0.875rem; color: rgba(255,255,255,0.6);">
+                                ${coupon.discount}% discount • ${coupon.used ? 'Used' : 'Active'}
+                            </div>
+                        </div>
+                        <div style="text-align: right; font-size: 0.75rem; color: rgba(255,255,255,0.5);">
+                            ${new Date(coupon.createdAt).toLocaleDateString()}
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed; top: 100px; right: 20px;
+                background: rgba(15, 23, 42, 0.95); color: white;
+                padding: 1.5rem 2rem; border-radius: 16px;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+                z-index: 3000; animation: slideInRight 0.4s ease;
+                border-left: 4px solid ${type === 'success' ? '#10b981' : '#ef4444'};
+            `;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        // Load stats on page load
+        loadStats();
+    </script>
+</body>
+</html>
+        <div class="vendor-grid">
+            <div class="vendor-card">
+                <h3 style="color: white; margin-bottom: 1.5rem;">📋 Create New Task</h3>
+                <form id="createTaskForm">
+                    <div class="form-group">
+                        <label>Task Title</label>
+                        <input type="text" name="title" required placeholder="e.g., Follow Instagram">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="description" placeholder="Task instructions..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Task Type</label>
+                        <select name="taskType" required>
+                            <option value="social_media">Social Media</option>
+                            <option value="content">Content</option>
+                            <option value="engagement">Engagement</option>
+                            <option value="referral">Referral</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Reward (₦)</label>
+                        <input type="number" name="reward" required min="100" step="50">
+                    </div>
+                    <div class="form-group">
+                        <label>Plan Required</label>
+                        <select name="planRequired">
+                            <option value="">All Plans</option>
+                            <option value="lite">Lite</option>
+                            <option value="standard">Standard</option>
+                            <option value="premium">Premium</option>
+                            <option value="bg">BG</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-create-task">✅ Create Task</button>
+                </form>
+            </div>
+
+            <div class="vendor-card">
+                <h3 style="color: white; margin-bottom: 1.5rem;">📊 Platform Stats</h3>
+                <div style="display: grid; gap: 1rem;">
+                    <div style="background: rgba(16, 185, 129, 0.1); padding: 1.5rem; border-radius: 10px;">
+                        <div style="font-size: 2.5rem; font-weight: 800; color: #10b981;" id="totalTasks">0</div>
+                        <div style="color: rgba(255, 255, 255, 0.6);">Total Tasks</div>
+                    </div>
+                    <div style="background: rgba(59, 130, 246, 0.1); padding: 1.5rem; border-radius: 10px;">
+                        <div style="font-size: 2.5rem; font-weight: 800; color: #3b82f6;" id="activeTasks">0</div>
+                        <div style="color: rgba(255, 255, 255, 0.6);">Active Now</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="task-manager">
+            <h3 style="color: white; margin-bottom: 1.5rem;">🎯 All Tasks</h3>
+            <div id="tasksList" style="color: rgba(255, 255, 255, 0.6); text-align: center; padding: 2rem;">Loading tasks...</div>
+        </div>
+    </div>
+
+    <script src="app-auth.js"></script>
+    <script>
+        const user = JSON.parse(localStorage.getItem('paradoxUser') || 'null');
+        
+        if (!user || (user.userType !== 'admin' && user.userType !== 'vendor')) {
+            window.location.href = '/dashboard.html';
+        }
+
+        document.getElementById('vendorName').textContent = user.fullname;
+
+        async function loadTasks() {
+            try {
+                const res = await fetch('/api/admin/tasks/list');
+                const data = await res.json();
+                
+                if (data.success) {
+                    document.getElementById('totalTasks').textContent = data.tasks.length;
+                    document.getElementById('activeTasks').textContent = data.tasks.filter(t => t.isActive).length;
+                    displayTasks(data.tasks);
+                }
+            } catch (e) {
+                console.error('Load error:', e);
+            }
+        }
+
+        function displayTasks(tasks) {
+            const list = document.getElementById('tasksList');
+            
+            if (!tasks.length) {
+                list.innerHTML = '<p style="color: rgba(255, 255, 255, 0.6); text-align: center; padding: 2rem;">No tasks. Create one above!</p>';
+                return;
+            }
+
+            list.innerHTML = tasks.map(t => `
+                <div class="task-item-admin">
+                    <div class="task-info-admin">
+                        <h4>${t.title}</h4>
+                        <p>${t.description || 'No description'}</p>
+                        <p><strong>₦${Number(t.reward).toLocaleString()}</strong> | ${t.taskType} | ${t.planRequired || 'All'}</p>
+                        <span class="task-status ${t.isActive ? 'status-active' : 'status-inactive'}">
+                            ${t.isActive ? '● Active' : '○ Inactive'}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('createTaskForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = new FormData(e.target);
+            
+            try {
+                const res = await fetch('/api/admin/tasks', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        adminId: user.id,
+                        title: form.get('title'),
+                        description: form.get('description'),
+                        taskType: form.get('taskType'),
+                        reward: form.get('reward'),
+                        planRequired: form.get('planRequired') || null,
+                        isActive: true
+                    })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    alert('✅ Task created!');
+                    e.target.reset();
+                    loadTasks();
+                } else {
+                    alert('❌ ' + data.error);
+                }
+            } catch (e) {
+                alert('Failed: ' + e.message);
+            }
+        });
+
+        loadTasks();
+        setInterval(loadTasks, 30000);
+    </script>
+</body>
+</html>
